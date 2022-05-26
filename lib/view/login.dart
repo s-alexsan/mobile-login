@@ -1,3 +1,4 @@
+import 'package:app_login/build/form.dart';
 import 'package:app_login/model/login.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +16,7 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    objModel.validaUsuario();
+    objModel.validaUsuario(context);
     super.initState();
   }
 
@@ -24,31 +25,40 @@ class _LoginState extends State<Login> {
     return Scaffold(
       appBar: AppBar(),
       body: StreamBuilder<Object>(
-        stream: objModel.stream,
+        // verifica se o usuario ja esta cadastrado no SQLITE
+        stream: objModel.validaUsuario(context),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData && snapshot.data) {
+          if (objModel.loading) {
             return const Center(child: CircularProgressIndicator());
           } else {
-            print(objModel.login);
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    buildTextFormField(
-                      objModel.controller1,
-                      hintText: 'Usuário',
+            return StreamBuilder<Object>(
+              stream: objModel.stream,
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (objModel.loading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          BuildForm(
+                            objModel.controller1,
+                            hintText: 'Usuário',
+                          ),
+                          BuildForm(
+                            objModel.controller2,
+                            obscureText: true,
+                            hintText: 'Senha',
+                          ),
+                          builTextButton(context)
+                        ],
+                      ),
                     ),
-                    buildTextFormField(
-                      objModel.controller2,
-                      obscureText: true,
-                      hintText: 'Senha',
-                    ),
-                    builTextButton(context)
-                  ],
-                ),
-              ),
+                  );
+                }
+              },
             );
           }
         },
@@ -90,6 +100,7 @@ class _LoginState extends State<Login> {
       child: TextFormField(
         controller: controller,
         obscureText: obscureText,
+        textInputAction: TextInputAction.next,
         decoration: InputDecoration(
           border: const OutlineInputBorder(),
           hintText: hintText,

@@ -1,3 +1,4 @@
+import 'package:app_login/view/det.dart';
 import 'package:app_login/view/cab.dart';
 import 'package:app_login/view/login.dart';
 import 'package:app_login/view/management.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const Login(),
         '/management': (context) => const Management(),
         '/cab': (context) => const Cab(),
+        '/det': (context) => const Det(),
       },
     );
   }

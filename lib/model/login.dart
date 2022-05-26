@@ -21,27 +21,34 @@ class ModelLogin {
 
   Stream<bool> get stream => _streamController.stream;
 
-  Future<void> validaUsuario() async {
-    loading = !loading;
-    _streamController.sink.add(true);
+  Stream<bool> validaUsuario(context) async* {
+    change();
+    yield loading;
     List<Map<String, dynamic>> readData = await objCRUD.read('AUT_USUARIO');
-    if (readData.isNotEmpty) login = true;
+    if (readData.isNotEmpty) {
+      Navigator.pushReplacementNamed(context, '/management');
+    } else {
+      change();
+      yield loading;
+    }
   }
 
   // Função que verifica o login do usuário
   Future<int> verificarUsuario() async {
+    change();
     int result = 0;
-    change();
-    int data = await objCRUD.insert('AUT_USUARIO', toJson());
-    List<Map<String, dynamic>> readData = await objCRUD.read('AUT_USUARIO');
-    _streamController.sink.add(true);
-    print(readData);
+    try {
+      await objCRUD.insert('AUT_USUARIO', toJson());
+      await objCRUD.read('AUT_USUARIO');
 
-    var rng = Random();
-    result = rng.nextInt(2);
-    msg = "Falha em carregar";
-    change();
-    return result;
+      result = 1;
+      change();
+      return result;
+    } catch (e) {
+      change();
+      msg = "Erro ao processar";
+      return result;
+    }
   }
 
   void change() {

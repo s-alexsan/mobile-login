@@ -1,3 +1,4 @@
+import 'package:app_login/model/globals.dart';
 import 'package:flutter/material.dart';
 
 class Management extends StatefulWidget {
@@ -27,7 +28,18 @@ class MmanagementState extends State<Management> with SingleTickerProviderStateM
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              onPressed: () => {
+                objCRUD
+                    .delete('AUT_USUARIO')
+                    .then((value) => Navigator.of(context).pushReplacementNamed('/'))
+              },
+              icon: const Icon(Icons.exit_to_app),
+            )
+          ],
+        ),
         body: Column(
           children: [
             ElevatedButton(
