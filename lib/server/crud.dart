@@ -8,13 +8,15 @@ class Crud {
 
   Future<void> connect() async => db = await database();
 
-  Future<int> insert(String tabela, Map<String, dynamic> objMap) async => await db!.insert(
+  Future<int> insert(String tabela, Map<String, dynamic> objMap) async =>
+      await db!.insert(
         tabela,
         objMap,
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
 
-  Future<int> delete(String tabela, {String? where, List<String>? whereArgs}) async =>
+  Future<int> delete(String tabela,
+          {String? where, List<String>? whereArgs}) async =>
       await db!.delete(
         tabela,
         where: where,
@@ -22,7 +24,7 @@ class Crud {
       );
 
   Future<int> update(String tabela, Map<String, dynamic> objMap,
-          {String? where, List<String>? whereArgs}) async =>
+          {String? where = '', List<String>? whereArgs}) async =>
       await db!.update(
         tabela,
         objMap,
@@ -47,6 +49,28 @@ class Crud {
         columns: columns,
       );
 
+  Future<int> iu(String table, int pk, Map<String, dynamic> objMap) async {
+    int result = 0;
+    try {
+      if (pk == 0) {
+        result = await insert(
+          table,
+          objMap,
+        );
+      } else {
+        result = await update(
+          table,
+          objMap,
+          where: 'PK = ?',
+          whereArgs: [pk.toString()],
+        );
+      }
+      return result;
+    } catch (e) {
+      return result;
+    }
+  }
+
   Future<Database> database() async {
     WidgetsFlutterBinding.ensureInitialized();
     final Future<Database> database = openDatabase(
@@ -61,6 +85,7 @@ class Crud {
       onCreate: (db, version) async {
         List<String> queryes = [
           "CREATE TABLE IF NOT EXISTS AUT_USUARIO (PK_USUARIO INTEGER PRIMARY KEY AUTOINCREMENT, USERNAME TEXT,PASSWORD TEXT);",
+          "CREATE TABLE IF NOT EXISTS CAB (PK INTEGER PRIMARY KEY AUTOINCREMENT, CARTEIRO TEXT, REVESTIMENTO TEXT, METAL TEXT, DIAMETRO INTEGER, NF TEXT, DATA TEXT, INSP TEXT);",
         ];
         await Future.forEach(queryes, (String element) async {
           await db.execute(element);

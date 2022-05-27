@@ -4,22 +4,16 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:app_login/model/globals.dart';
+import 'package:app_login/model/loading.dart';
 import 'package:flutter/material.dart';
 
-class ModelLogin {
+class ModelLogin extends Loading {
   TextEditingController controller1 = TextEditingController();
   TextEditingController controller2 = TextEditingController();
   String msg = "";
-  bool loading = false;
   bool login = false;
 
   ModelLogin();
-
-  bool get search => loading;
-
-  final _streamController = StreamController<bool>.broadcast();
-
-  Stream<bool> get stream => _streamController.stream;
 
   Stream<bool> validaUsuario(context) async* {
     change();
@@ -51,11 +45,6 @@ class ModelLogin {
     }
   }
 
-  void change() {
-    loading = !loading;
-    _streamController.sink.add(loading);
-  }
-
   ModelLogin.fromJson(Map<String, dynamic> json) {
     controller1 = json['controller1'];
     controller2 = json['controller2'];
@@ -66,9 +55,5 @@ class ModelLogin {
     data['USERNAME'] = controller1.text;
     data['PASSWORD'] = controller2.text;
     return data;
-  }
-
-  close() {
-    _streamController.close();
   }
 }

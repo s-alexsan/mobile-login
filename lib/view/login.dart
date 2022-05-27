@@ -92,26 +92,4 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
-  Widget buildTextFormField(TextEditingController controller,
-      {bool obscureText = false, String hintText = ''}) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: TextFormField(
-        controller: controller,
-        obscureText: obscureText,
-        textInputAction: TextInputAction.next,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          hintText: hintText,
-        ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Campo obrigatório';
-          }
-          return null;
-        },
-      ),
-    );
-  }
 }

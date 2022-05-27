@@ -11,7 +11,14 @@ class _CabState extends State<Cab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            onPressed: () => Navigator.of(context).pushNamed('/cabDet'),
+            icon: const Icon(Icons.add),
+          )
+        ],
+      ),
       body: Column(
         children: [
           ElevatedButton(
