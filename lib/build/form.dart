@@ -4,8 +4,10 @@ class BuildForm extends StatefulWidget {
   final TextEditingController controller;
   final bool obscureText;
   final String? hintText;
+  final TextInputType inputType;
 
-  const BuildForm(this.controller, {this.obscureText = false, this.hintText, Key? key})
+  const BuildForm(this.controller,
+      {this.obscureText = false, this.hintText, this.inputType = TextInputType.text, Key? key})
       : super(key: key);
 
   @override
@@ -16,12 +18,14 @@ class _BuildFormState extends State<BuildForm> {
   late TextEditingController controller;
   bool obscureText = false;
   String? hintText;
+  TextInputType inputType = TextInputType.text;
 
   @override
   void initState() {
     controller = widget.controller;
     obscureText = widget.obscureText;
     hintText = widget.hintText;
+    inputType = widget.inputType;
     super.initState();
   }
 
@@ -31,6 +35,7 @@ class _BuildFormState extends State<BuildForm> {
       controller: controller,
       obscureText: obscureText,
       textInputAction: TextInputAction.next,
+      keyboardType: inputType,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         hintText: hintText,
