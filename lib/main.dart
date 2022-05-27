@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const Login(),
         '/management': (context) => const Management(),
         '/cab': (context) => const Cab(),
-        '/cabDet': (context) => const CabDet(),
+        '/cabDet': (context) => CabDet(),
         '/det': (context) => const Det(),
       },
     );
